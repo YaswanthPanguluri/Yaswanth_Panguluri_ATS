@@ -1,0 +1,41 @@
+/* Add any global styles or resets here */
+* {
+  box-sizing: border-box; /* Ensure consistent box models */
+}
+
+.container {
+  margin-top: 20px;
+}
+
+.row {
+  margin-left: 0; /* Remove default Bootstrap row margins */
+  margin-right: 0;
+}
+
+.col-md-6 {
+  padding: 0 15px;
+}
+
+/* Left side styles */
+textarea {
+  width: 100%; /* Make the textarea full width */
+}
+
+/* Right side form styles */
+.right-column {
+  border: 1px solid #ccc; /* Add a border to the right column */
+  padding: 20px; /* Add padding for better aesthetics */
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+/* Adjust styles for the submit button */
+.btn-primary {
+  width: 100%;
+}
+
+/* Media queries or specific styles for responsiveness can be added here */
