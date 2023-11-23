@@ -19,7 +19,7 @@ jobs:
         run: npm ci
 
       - name: Log Initilization Job Completed
-        run: echo "*********Initilization Job Completed!"*********"
+        run: echo "********* Initilization Completed! *********"
 
   build:
     needs: Initilization
@@ -32,7 +32,7 @@ jobs:
         run: npm run build
 
       - name: Log Build Job Completed
-        run: echo ""*********Build Job Completed!"*********"
+        run: echo "********* Build Completed! *********"
 
   deploy:
     needs: build
@@ -50,4 +50,4 @@ jobs:
           projectId: yaswanth-panguluri-ats-10562
 
       - name: Log Deploy Job Completed
-        run: echo ""*********Deploy Job Completed!"*********"
+        run: echo "********* Deployment Completed! *********"
