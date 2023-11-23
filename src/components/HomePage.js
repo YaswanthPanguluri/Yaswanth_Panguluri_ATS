@@ -5,7 +5,7 @@ import Content from './Content';
 const HomePage = () => {
   return (
     <div className="container mt-4">
-      <h1 className="text-center">Yaswanth Panguluri Application Tracking System 😉</h1>
+      <h1 className="text-center">Application Tracking System</h1>
       <div className="row">
         <div className="col-md-12">
           <Content />
