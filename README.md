@@ -17,7 +17,7 @@ This React application allows users to submit job applications, including a job 
 1. Clone the repository to your local machine:
 
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/YaswanthPanguluri/Yaswanth_Panguluri_ATS
 Install dependencies:
 npm install
 Create a Firebase project and configure your Firebase credentials.
@@ -32,20 +32,22 @@ npm start
 Open the application in your browser and start submitting job applications.
 
 ## Folder Structure
+
+```
 .
 ├── src
-│   ├── components
-│   │   ├── Content.js
-│   ├── firebase
-│   │   ├── firebase.js
-│   ├── App.js
-│   └── index.js
+│ ├── components
+│ │ ├── Content.js
+│ ├── firebase
+│ │ ├── firebase.js
+│ ├── App.js
+│ └── index.js
 ├── public
-│   └── index.html
+│ └── index.html
 ├── .gitignore
 ├── package.json
 └── README.md
-
+```
 ## Key Features
 Job Application Submission: Users can submit job applications including job description, company details, and resumes.
 Firebase Integration: Data is stored in Firebase Firestore, and resumes are uploaded to Firebase Storage.
