@@ -8,6 +8,7 @@ function App() {
   return (
     <div className="App">
       <HomePage />
+      <p>© 2023 Yaswanth Panguluri</p>
     </div>
   );
 }
