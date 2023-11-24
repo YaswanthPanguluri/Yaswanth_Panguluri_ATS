@@ -24,14 +24,14 @@ Create a Firebase project and configure your Firebase credentials.
 
 Adjust the path in the import statement for Firebase in Content.js based on your project structure.
 
-Usage
+##Usage
 Run the application:
 
 npm start
 
 Open the application in your browser and start submitting job applications.
 
-Folder Structure
+##Folder Structure
 .
 ├── src
 │   ├── components
@@ -46,16 +46,16 @@ Folder Structure
 ├── package.json
 └── README.md
 
-Key Features
+##Key Features
 Job Application Submission: Users can submit job applications including job description, company details, and resumes.
 Firebase Integration: Data is stored in Firebase Firestore, and resumes are uploaded to Firebase Storage.
 Responsive Design: The application is designed to be responsive and user-friendly.
 
-Contributing
+##Contributing
 Contributions are welcome! Please follow the contribution guidelines.
 
-License
+##License
 This project is licensed under the MIT License.
 
-Contact
+##Contact
 For any questions or feedback, please reach out to Yaswanth Panguluri at panguluriyaswanth@gmail.com
