@@ -7,18 +7,23 @@ on:
 
 jobs:
   build-and-deploy:
+
+
     runs-on: ubuntu-latest
+
     steps:
+
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Install dependencies
+      - name: Install
         run: npm ci
 
-      - name: Build project
+      - name: Build
         run: npm run build
+        
 
-      - name: Deploy to Firebase Hosting
+      - name: Deploy
         uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'

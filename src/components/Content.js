@@ -51,6 +51,10 @@ function Content() {
     });
   };
 
+  const [uploadStatus, setUploadStatus] = useState(null);
+
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
   
@@ -85,7 +89,8 @@ function Content() {
           ...formData,
           resume: downloadURL,
         });
-  
+
+        setUploadStatus('Data successfully submitted');  
         console.log('Data successfully submitted to Firestore!');
       })
       .catch((error) => {
@@ -162,7 +167,9 @@ function Content() {
             </div>
 
             <div className="form-group">
-              <label htmlFor="exampleFormControlFile1">Upload your Resume</label>
+              <label htmlFor="exampleFormControlFile1">
+                Upload your Resume
+              </label>
               <div className="custom-file">
                 <input
                   type="file"
@@ -213,6 +220,25 @@ function Content() {
                 Submit
               </button>
             </div>
+
+            {uploadStatus && (
+              <div
+                className={`alert ${
+                  uploadStatus.includes("successfully")
+                    ? "alert-success"
+                    : "alert-danger"
+                }`}
+                role="alert"
+              >
+                {uploadStatus.includes("successfully") ? (
+                  <p>Your data has been successfully submitted!</p>
+                ) : (
+                  <p>
+                    There was an error uploading the data. Please try again.
+                  </p>
+                )}
+              </div>
+            )}
           </form>
         </div>
       </div>
