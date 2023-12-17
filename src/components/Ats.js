@@ -4,7 +4,7 @@ import { getFirestore } from 'firebase/firestore';
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { collection, addDoc } from 'firebase/firestore';
 
-function Content() {
+function Ats() {
   const firestore = getFirestore(app);
   const storage = getStorage(app); 
 
@@ -246,4 +246,4 @@ function Content() {
   );
 }
 
-export default Content;
+export default Ats;
