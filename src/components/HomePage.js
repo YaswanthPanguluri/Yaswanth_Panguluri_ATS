@@ -6,7 +6,8 @@ const HomePage = () => {
   return (
     <div className="container mt-4">
       <h1 className="text-center">Yaswanth Panguluri </h1>
-    </div>
+     <h1 className="text-center">ats </h1>
+    </ div>
   );
 };
 
