@@ -2,18 +2,31 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>CherryPy App</title>
+    <title>Login</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
-    <h1>Welcome to the CherryPy Application</h1>
+    <h1>Login</h1>
     <form method="post" action="/login">
-        <input type="text" name="username" placeholder="Username" required><br>
-        <input type="password" name="password" placeholder="Password" required><br>
+        <input type="text" name="username" placeholder="User ID" required><br><br>
+        <input type="password" name="password" placeholder="Password" required><br><br>
         <button type="submit">Login</button>
     </form>
+</body>
+</html>
 
-    <form method="post" action="/trigger" style="margin-top:20px;">
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>Dashboard</h1>
+    <form method="post" action="/trigger">
         <h3>Select Parameters:</h3>
 
         <label for="param1">Parameter 1:</label>
@@ -42,6 +55,24 @@
 
         <button type="submit">Run Script</button>
     </form>
+
+    <form method="post" action="/logout" style="margin-top: 20px;">
+        <button type="submit">Logout</button>
+    </form>
+</body>
+</html>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Logout</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>You have been logged out.</h1>
+    <a href="/">Go to Login Page</a>
 </body>
 </html>
 
@@ -51,47 +82,60 @@ from jinja2 import Environment, FileSystemLoader
 import os
 import subprocess
 
-# Configure Jinja2 to load HTML templates
+# Setup Jinja2 for HTML rendering
 env = Environment(loader=FileSystemLoader('templates'))
 
-# Simulated user credentials
+# Mock user database
 USERS = {"admin": "password"}
 
 class App:
     @cherrypy.expose
     def index(self):
-        tmpl = env.get_template('index.html')
+        """Landing page that redirects to login."""
+        raise cherrypy.HTTPRedirect("/login")
+
+    @cherrypy.expose
+    def login(self, username=None, password=None):
+        """Login handler."""
+        if cherrypy.request.method == "POST":
+            if username in USERS and USERS[username] == password:
+                cherrypy.session['authenticated'] = True
+                raise cherrypy.HTTPRedirect("/dashboard")
+            else:
+                return "Invalid credentials. <a href='/login'>Try again</a>"
+        tmpl = env.get_template('login.html')
         return tmpl.render()
 
     @cherrypy.expose
-    def login(self, username, password):
-        if username in USERS and USERS[username] == password:
-            cherrypy.session['authenticated'] = True
-            return "Login successful! <a href='/'>Go back</a>"
-        else:
-            return "Invalid credentials. <a href='/'>Try again</a>"
+    def dashboard(self):
+        """Dashboard with parameter selection."""
+        if not cherrypy.session.get('authenticated'):
+            raise cherrypy.HTTPRedirect("/login")
+        tmpl = env.get_template('dashboard.html')
+        return tmpl.render()
 
     @cherrypy.expose
     def trigger(self, param1, param2, param3, param4):
+        """Execute the shell script with parameters."""
         if not cherrypy.session.get('authenticated'):
-            return "Unauthorized. Please log in first. <a href='/'>Login</a>"
-
-        # Print the selected parameters (for debugging purposes)
-        print(f"Received parameters: {param1}, {param2}, {param3}, {param4}")
-
+            raise cherrypy.HTTPRedirect("/login")
         try:
-            # Run the shell script with parameters as arguments
             result = subprocess.run(
                 ["./run_script.sh", param1, param2, param3, param4],
-                check=True,
-                capture_output=True,
-                text=True
+                check=True, capture_output=True, text=True
             )
-            return f"Script executed successfully! Output: <pre>{result.stdout}</pre>"
+            return f"Script executed successfully! <pre>{result.stdout}</pre>"
         except subprocess.CalledProcessError as e:
             return f"Error: <pre>{e.stderr}</pre>"
 
-# CherryPy configuration
+    @cherrypy.expose
+    def logout(self):
+        """Logout and clear session."""
+        cherrypy.session.clear()
+        tmpl = env.get_template('logout.html')
+        return tmpl.render()
+
+# CherryPy server configuration
 if __name__ == '__main__':
     cherrypy.config.update({
         'server.socket_host': '0.0.0.0',
@@ -99,7 +143,7 @@ if __name__ == '__main__':
         'tools.sessions.on': True,
         'tools.staticdir.root': os.path.abspath(os.getcwd())
     })
-    
+
     cherrypy.quickstart(App(), '/', {
         '/static': {
             'tools.staticdir.on': True,
@@ -108,19 +152,17 @@ if __name__ == '__main__':
     })
 
 
-
 body {
     font-family: Arial, sans-serif;
     text-align: center;
     margin-top: 100px;
 }
 
-input, button {
+input, select, button {
     margin: 10px;
     padding: 10px;
     width: 200px;
 }
-
 
 
 
