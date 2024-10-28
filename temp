@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CherryPy App</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <h1>Welcome to the CherryPy Application</h1>
+    <form method="post" action="/login">
+        <input type="text" name="username" placeholder="Username" required><br>
+        <input type="password" name="password" placeholder="Password" required><br>
+        <button type="submit">Login</button>
+    </form>
+
+    <form method="post" action="/trigger" style="margin-top:20px;">
+        <h3>Select Parameters:</h3>
+
+        <label for="param1">Parameter 1:</label>
+        <select name="param1" id="param1">
+            <option value="Option1">Option 1</option>
+            <option value="Option2">Option 2</option>
+        </select><br><br>
+
+        <label for="param2">Parameter 2:</label>
+        <select name="param2" id="param2">
+            <option value="OptionA">Option A</option>
+            <option value="OptionB">Option B</option>
+        </select><br><br>
+
+        <label for="param3">Parameter 3:</label>
+        <select name="param3" id="param3">
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+        </select><br><br>
+
+        <label for="param4">Parameter 4:</label>
+        <select name="param4" id="param4">
+            <option value="High">High</option>
+            <option value="Low">Low</option>
+        </select><br><br>
+
+        <button type="submit">Run Script</button>
+    </form>
+</body>
+</html>
+
+
+import cherrypy
+from jinja2 import Environment, FileSystemLoader
+import os
+import subprocess
+
+# Configure Jinja2 to load HTML templates
+env = Environment(loader=FileSystemLoader('templates'))
+
+# Simulated user credentials
+USERS = {"admin": "password"}
+
+class App:
+    @cherrypy.expose
+    def index(self):
+        tmpl = env.get_template('index.html')
+        return tmpl.render()
+
+    @cherrypy.expose
+    def login(self, username, password):
+        if username in USERS and USERS[username] == password:
+            cherrypy.session['authenticated'] = True
+            return "Login successful! <a href='/'>Go back</a>"
+        else:
+            return "Invalid credentials. <a href='/'>Try again</a>"
+
+    @cherrypy.expose
+    def trigger(self, param1, param2, param3, param4):
+        if not cherrypy.session.get('authenticated'):
+            return "Unauthorized. Please log in first. <a href='/'>Login</a>"
+
+        # Print the selected parameters (for debugging purposes)
+        print(f"Received parameters: {param1}, {param2}, {param3}, {param4}")
+
+        try:
+            # Run the shell script with parameters as arguments
+            result = subprocess.run(
+                ["./run_script.sh", param1, param2, param3, param4],
+                check=True,
+                capture_output=True,
+                text=True
+            )
+            return f"Script executed successfully! Output: <pre>{result.stdout}</pre>"
+        except subprocess.CalledProcessError as e:
+            return f"Error: <pre>{e.stderr}</pre>"
+
+# CherryPy configuration
+if __name__ == '__main__':
+    cherrypy.config.update({
+        'server.socket_host': '0.0.0.0',
+        'server.socket_port': 8080,
+        'tools.sessions.on': True,
+        'tools.staticdir.root': os.path.abspath(os.getcwd())
+    })
+    
+    cherrypy.quickstart(App(), '/', {
+        '/static': {
+            'tools.staticdir.on': True,
+            'tools.staticdir.dir': './static'
+        }
+    })
+
+
+
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin-top: 100px;
+}
+
+input, button {
+    margin: 10px;
+    padding: 10px;
+    width: 200px;
+}
+
+
+
+
